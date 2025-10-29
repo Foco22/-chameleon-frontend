@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piazza - Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>Piazza</h1>
+            <div class="nav-right">
+                <span id="userName" class="user-name"></span>
+                <button onclick="handleLogout()" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>Topics</h3>
+            <div class="topic-filters">
+                <button class="topic-btn active" onclick="filterByTopic('All')">All Topics</button>
+                <button class="topic-btn" onclick="filterByTopic('Politics')">Politics</button>
+                <button class="topic-btn" onclick="filterByTopic('Health')">Health</button>
+                <button class="topic-btn" onclick="filterByTopic('Sport')">Sport</button>
+                <button class="topic-btn" onclick="filterByTopic('Tech')">Tech</button>
+            </div>
+
+            <div class="sidebar-actions">
+                <button class="btn btn-primary" onclick="showCreatePostModal()">Create Post</button>
+                <button class="btn btn-secondary" onclick="showMostActiveModal()">Most Active Post</button>
+                <button class="btn btn-secondary" onclick="showExpiredPosts()">View Expired Posts</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <h2 id="topicTitle">All Topics</h2>
+                <div class="filter-controls">
+                    <label>
+                        <input type="checkbox" id="showOnlyLive" checked onchange="loadPosts()">
+                        Show only live posts
+                    </label>
+                </div>
+            </div>
+
+            <div id="postsContainer" class="posts-container">
+                <!-- Posts will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreatePostModal()">&times;</span>
+            <h2>Create New Post</h2>
+            <form onsubmit="handleCreatePost(event)">
+                <div class="form-group">
+                    <label for="postTitle">Title</label>
+                    <input type="text" id="postTitle" required minlength="3" maxlength="200" placeholder="Enter post title">
+                </div>
+                <div class="form-group">
+                    <label for="postTopics">Topics (hold Ctrl/Cmd to select multiple)</label>
+                    <select id="postTopics" multiple required>
+                        <option value="Politics">Politics</option>
+                        <option value="Health">Health</option>
+                        <option value="Sport">Sport</option>
+                        <option value="Tech">Tech</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="postMessage">Message</label>
+                    <textarea id="postMessage" required minlength="10" maxlength="5000" rows="5" placeholder="Enter your message"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="expirationMinutes">Expiration Time (minutes) ⏱️</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="document.getElementById('expirationMinutes').value = 1">1 min</button>
+                        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="document.getElementById('expirationMinutes').value = 5">5 min</button>
+                        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="document.getElementById('expirationMinutes').value = 10">10 min</button>
+                        <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="document.getElementById('expirationMinutes').value = 60">1 hour</button>
+                    </div>
+                    <input type="number" id="expirationMinutes" required min="1" value="5" placeholder="Enter custom time in minutes" style="font-size: 16px; font-weight: 600;">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Post</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Most Active Post Modal -->
+    <div id="mostActiveModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMostActiveModal()">&times;</span>
+            <h2>Most Active Post by Topic</h2>
+            <div class="form-group">
+                <label for="mostActiveTopic">Select Topic</label>
+                <select id="mostActiveTopic">
+                    <option value="Politics">Politics</option>
+                    <option value="Health">Health</option>
+                    <option value="Sport">Sport</option>
+                    <option value="Tech">Tech</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="findMostActivePost()">Find Most Active</button>
+            <div id="mostActiveResult" class="most-active-result"></div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

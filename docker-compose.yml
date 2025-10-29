@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  piazza-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: piazza-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks:
+      - piazza-network
+
+networks:
+  piazza-network:
+    driver: bridge
